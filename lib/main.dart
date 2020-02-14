@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
     String batteryLevel;
     try {
       var result = await platform.invokeMethod('getTrueCaller');
-      batteryLevel = 'Battery level at $result % .';
+      batteryLevel = 'Battery level at $result.';
     } on PlatformException catch (e) {
       batteryLevel = "Failed to get battery level: '${e.message}'.";
     }

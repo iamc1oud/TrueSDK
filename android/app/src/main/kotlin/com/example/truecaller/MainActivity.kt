@@ -14,12 +14,42 @@ import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.os.PersistableBundle
+import androidx.lifecycle.LifecycleRegistry
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.util.Log
+import androidx.lifecycle.Lifecycle
+import com.truecaller.android.sdk.*
+import java.util.logging.Logger
+
 
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "samples.flutter.dev/battery"
 
+    private val sdkCallback = object : ITrueCallback {
+
+        override fun onSuccessProfileShared(trueProfile: TrueProfile) {
+
+        }
+
+        override fun onVerificationRequired() {
+
+        }
+
+        override fun onFailureProfileShared(trueError: TrueError) {
+
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
+        val trueScope = TrueSdkScope.Builder(this, sdkCallback)
+                .consentMode(TrueSdkScope.CONSENT_MODE_FULLSCREEN )
+                .consentTitleOption( TrueSdkScope.SDK_CONSENT_TITLE_VERIFY )
+                .footerType( TrueSdkScope.FOOTER_TYPE_SKIP )
+                .build()
+        TrueSDK.init(trueScope)
     }
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -30,16 +60,7 @@ class MainActivity: FlutterActivity() {
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
             // Note: this method is invoked on the main thread.
             call, result ->
-            if (call.method == "getBatteryLevel") {
-                val batteryLevel = getBatteryLevel()
-
-                if (batteryLevel != -1) {
-                    result.success(batteryLevel)
-                } else {
-                    result.error("UNAVAILABLE", "Battery level not available.", null)
-                }
-            }
-            else if(call.method == "getTrueCaller") {
+             if(call.method == "getTrueCaller") {
                 result.success(getTrueCaller())
             }
             else {
@@ -48,20 +69,13 @@ class MainActivity: FlutterActivity() {
         }
     }
 
-    private fun getBatteryLevel(): Int {
-        val batteryLevel: Int
-        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-            val batteryManager = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-            batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-        } else {
-            val intent = ContextWrapper(applicationContext).registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
-            batteryLevel = intent!!.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) * 100 / intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
-        }
-
-        return batteryLevel
-    }
-
-    private fun getTrueCaller() : Boolean {
-        return true
+    private fun getTrueCaller()  : Boolean {
+        val trueScope = TrueSdkScope.Builder(this, sdkCallback)
+                .consentMode(TrueSdkScope.CONSENT_MODE_FULLSCREEN )
+                .consentTitleOption( TrueSdkScope.SDK_CONSENT_TITLE_VERIFY )
+                .footerType( TrueSdkScope.FOOTER_TYPE_SKIP )
+                .build()
+           TrueSDK.init(trueScope)
+            return TrueSDK.getInstance().isUsable()
     }
 }
