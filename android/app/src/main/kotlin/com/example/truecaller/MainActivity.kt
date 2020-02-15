@@ -1,5 +1,6 @@
 package com.example.truecaller
 
+import android.app.Activity
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -18,64 +19,38 @@ import androidx.lifecycle.LifecycleRegistry
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import com.example.truecaller_verification.TrueCallerActivity
 import com.truecaller.android.sdk.*
 import java.util.logging.Logger
 
 
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "samples.flutter.dev/battery"
-
-    private val sdkCallback = object : ITrueCallback {
-
-        override fun onSuccessProfileShared(trueProfile: TrueProfile) {
-
-        }
-
-        override fun onVerificationRequired() {
-
-        }
-
-        override fun onFailureProfileShared(trueError: TrueError) {
-
-        }
-
-    }
+    private var user_email : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-        val trueScope = TrueSdkScope.Builder(this, sdkCallback)
-                .consentMode(TrueSdkScope.CONSENT_MODE_FULLSCREEN )
-                .consentTitleOption( TrueSdkScope.SDK_CONSENT_TITLE_VERIFY )
-                .footerType( TrueSdkScope.FOOTER_TYPE_SKIP )
-                .build()
-        TrueSDK.init(trueScope)
     }
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-        GeneratedPluginRegistrant.registerWith(flutterEngine);
-
-
+        GeneratedPluginRegistrant.registerWith(flutterEngine)
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
             // Note: this method is invoked on the main thread.
             call, result ->
-             if(call.method == "getTrueCaller") {
-                result.success(getTrueCaller())
-            }
+            if(call.method.equals("startActivity")){
+                 val intent = Intent(this, TrueCallerActivity::class.java)
+                 startActivity(intent)
+
+                 result.success("Activity started")
+             }
             else {
                 result.notImplemented()
             }
         }
     }
 
-    private fun getTrueCaller()  : Boolean {
-        val trueScope = TrueSdkScope.Builder(this, sdkCallback)
-                .consentMode(TrueSdkScope.CONSENT_MODE_FULLSCREEN )
-                .consentTitleOption( TrueSdkScope.SDK_CONSENT_TITLE_VERIFY )
-                .footerType( TrueSdkScope.FOOTER_TYPE_SKIP )
-                .build()
-           TrueSDK.init(trueScope)
-            return TrueSDK.getInstance().isUsable()
-    }
+
 }

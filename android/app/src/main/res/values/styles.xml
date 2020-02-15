@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
-        <!-- Show a splash screen on the activity. Automatically removed when
-             Flutter draws its first frame -->
+    <style name="LaunchTheme" parent="@style/Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">#7B1FA2</item>
+        <item name="colorPrimaryDark">#4A148C</item>
+        <item name="colorAccent">@android:color/holo_blue_light</item>
+        <item name="android:windowBackground">@drawable/launch_background</item>
+    </style>
+    <style name="MyTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#7B1FA2</item>
+        <item name="colorPrimaryDark">#4A148C</item>
+        <item name="colorAccent">@android:color/holo_blue_light</item>
         <item name="android:windowBackground">@drawable/launch_background</item>
     </style>
 </resources>
