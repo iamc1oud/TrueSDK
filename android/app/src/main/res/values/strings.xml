@@ -3,4 +3,7 @@
     <string name="partnerKey">oNzvLc062ed998fab435ab3a52ca729ac5bd3</string>
     <string name="name">NameUser</string>
     <string name="button">Button</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

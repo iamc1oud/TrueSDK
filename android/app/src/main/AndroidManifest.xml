@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.truecaller">
+    package="com.example.truecaller_verifier">
 
     <application
         android:name="io.flutter.app.FlutterApplication"
@@ -9,7 +9,7 @@
 
         <meta-data
             android:name="com.truecaller.android.sdk.PartnerKey"
-            android:value="oNzvLc062ed998fab435ab3a52ca729ac5bd3" />
+            android:value="IKUKk11d4b36bf5b545b7b11a218097ff10ef" />
 
         <activity
             android:name=".MainActivity"
@@ -25,8 +25,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".TrueCallerActivity" android:theme="@style/Theme.AppCompat.Light" ></activity>
-        <activity android:name="com.example.truecaller_verification.TrueCallerActivity"
-            android:theme="@style/Theme.AppCompat.Light" />
         <!--
  Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
